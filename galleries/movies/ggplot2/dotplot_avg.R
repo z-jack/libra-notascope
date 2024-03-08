@@ -1,5 +1,0 @@
-library(tidyverse)
-
-df <- read_csv("data/movies.csv")
-ggplot(df) +
-  geom_point(aes(y = `Major Genre`, x = `Production Budget`), stat = "summary", fun = median)

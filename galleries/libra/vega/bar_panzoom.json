@@ -1,0 +1,105 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "width": 600,
+  "height": 400,
+  "padding": 5,
+  "data": [
+    {
+      "name": "source",
+      "values": [
+        {"letter": "A", "value": 0.08167},
+        {"letter": "B", "value": 0.01492},
+        {"letter": "C", "value": 0.02782},
+        {"letter": "D", "value": 0.04253},
+        {"letter": "E", "value": 0.12702},
+        {"letter": "F", "value": 0.02288},
+        {"letter": "G", "value": 0.02015},
+        {"letter": "H", "value": 0.06094},
+        {"letter": "I", "value": 0.06966},
+        {"letter": "J", "value": 0.00153},
+        {"letter": "K", "value": 0.00772},
+        {"letter": "L", "value": 0.04025},
+        {"letter": "M", "value": 0.02406},
+        {"letter": "N", "value": 0.06749},
+        {"letter": "O", "value": 0.07507},
+        {"letter": "P", "value": 0.01929},
+        {"letter": "Q", "value": 0.00095},
+        {"letter": "R", "value": 0.05987},
+        {"letter": "S", "value": 0.06327},
+        {"letter": "T", "value": 0.09056},
+        {"letter": "U", "value": 0.02758},
+        {"letter": "V", "value": 0.00978},
+        {"letter": "W", "value": 0.0236},
+        {"letter": "X", "value": 0.0015},
+        {"letter": "Y", "value": 0.01974},
+        {"letter": "Z", "value": 0.00074}
+      ]
+    }
+  ],
+  "signals": [
+    {
+      "name": "zoom", "value": 1,
+      "on": [
+        {"events": "wheel", "force": true, "update": "pow(1.005, event.deltaY * pow(16, event.deltaMode))"},
+        {"events": "touchstart", "force": true, "update": "1"}
+      ]
+    },
+    {
+      "name": "cursor", "value": [0, 0],
+      "on": [
+        {"events": "mousedown", "update": "[x(), y()]"},
+        {"events": "touchstart", "update": "[x(), y()]"}
+      ]
+    },
+    {
+      "name": "translate0", "value": [0, 0],
+      "on": [
+        {"events": "mousedown", "update": "[cursor[0], cursor[1]]"},
+        {"events": "touchstart", "update": "[cursor[0], cursor[1]]"}
+      ]
+    },
+    {
+      "name": "translate",
+      "value": [0, 0],
+      "on": [
+        {"events": "mousemove", "update": "[translate0[0] + x() - cursor[0], translate0[1] + y() - cursor[1]]"},
+        {"events": "touchmove", "update": "[translate0[0] + x() - cursor[0], translate0[1] + y() - cursor[1]]"},
+        {"events": "mouseup", "update": "[translate0[0] + x() - cursor[0], translate0[1] + y() - cursor[1]]"},
+        {"events": "touchend", "update": "[translate0[0] + x() - cursor[0], translate0[1] + y() - cursor[1]]"}
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "xscale",
+      "type": "band",
+      "domain": {"data": "source", "field": "letter"},
+      "range": {"step": 20}
+    },
+    {
+      "name": "yscale",
+      "domain": {"data": "source", "field": "value"},
+      "nice": true,
+      "range": "height"
+    }
+  ],
+  "axes": [
+    {"orient": "bottom", "scale": "xscale"},
+    {"orient": "left", "scale": "yscale"}
+  ],
+  "marks": [
+    {
+      "type": "rect",
+      "from": {"data": "source"},
+      "encode": {
+        "enter": {
+          "x": {"scale": "xscale", "field": "letter"},
+          "width": {"scale": "xscale", "band": 1, "offset": -1},
+          "y": {"scale": "yscale", "field": "value"},
+          "y2": {"scale": "yscale", "value": 0},
+          "fill": {"value": "steelblue"}
+        }
+      }
+    }
+  ]
+}

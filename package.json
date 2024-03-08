@@ -8,6 +8,7 @@
     "prettier": "^2.7.1",
     "uglify-js": "^3.17.4",
     "vega": "^5.22.1",
+    "vega-cli": "^5.28.0",
     "vega-lite": "5.6"
   }
 }
