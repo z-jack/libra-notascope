@@ -1,0 +1,47 @@
+{
+    "$schema": "https://vega.github.io/schema/vega/v5.json",
+    "width": 500,
+    "height": 300,
+    "data": [
+      {
+        "name": "world",
+        "url": "your_data_url.geojson",
+        "format": {"type": "geojson"}
+      },
+      {
+        "name": "hover",
+        "on": [
+          {"trigger": "mouseover", "insert": "datum"},
+          {"trigger": "mouseout", "remove": "datum"}
+        ]
+      }
+    ],
+    "scales": [
+      {
+        "name": "color",
+        "type": "ordinal",
+        "domain": {"data": "world", "field": "your_field"},
+        "range": ["lightgray", "lightblue"]
+      }
+    ],
+    "marks": [
+      {
+        "type": "geoshape",
+        "from": {"data": "world"},
+        "encode": {
+          "enter": {
+            "fill": {"scale": "color", "field": "your_field"},
+            "stroke": {"value": "white"},
+            "strokeWidth": {"value": 2}
+          },
+          "update": {
+            "fill": {"scale": "color", "field": "your_field"}
+          },
+          "hover": {
+            "fill": {"value": "lightblue"}
+          }
+        }
+      }
+    ]
+  }
+  

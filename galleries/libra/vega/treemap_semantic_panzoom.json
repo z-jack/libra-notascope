@@ -1,0 +1,60 @@
+{
+    "$schema": "https://vega.github.io/schema/vega/v5.json",
+    "width": 400,
+    "height": 400,
+    "autosize": "none",
+    "signals": [
+      {"name": "zoom", "value": 1, "bind": {"input": "range", "min": 1, "max": 5, "step": 0.1}}
+    ],
+    "data": [
+      {
+        "name": "tree",
+        "url": "your_data.json",
+        "transform": [
+          {
+            "type": "stratify",
+            "key": "id",
+            "parentKey": "parentId"
+          },
+          {
+            "type": "treemap",
+            "field": "value",
+            "sort": {"field": "value", "order": "descending"},
+            "round": true,
+            "method": {"signal": "zoom < 2 ? 'squarify' : 'binary'"}
+          }
+        ]
+      }
+    ],
+    "scales": [
+      {
+        "name": "color",
+        "type": "ordinal",
+        "domain": {"data": "tree", "field": "id"},
+        "range": "category"
+      }
+    ],
+    "marks": [
+      {
+        "type": "rect",
+        "from": {"data": "tree"},
+        "encode": {
+          "enter": {
+            "x": {"field": "x0"},
+            "y": {"field": "y0"},
+            "x2": {"field": "x1"},
+            "y2": {"field": "y1"},
+            "fill": {"scale": "color", "field": "id"}
+          },
+          "update": {
+            "x": {"field": "x0"},
+            "y": {"field": "y0"},
+            "x2": {"field": "x1"},
+            "y2": {"field": "y1"},
+            "fill": {"scale": "color", "field": "id"}
+          }
+        }
+      }
+    ]
+  }
+  
