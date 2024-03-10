@@ -1,1 +1,143 @@
-???
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "A basic scatter plot example depicting automobile statistics.",
+  "width": 400,
+  "height": 400,
+  "padding": 5,
+  "autosize": "pad",
+  "data": [
+    {
+      "name": "source",
+      "url": "data/cars.json",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum['Horsepower'] != null && datum['Miles_per_Gallon'] != null && datum['Acceleration'] != null"
+        }
+      ]
+    },
+    {
+      "name": "selected",
+      "source": "source",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "sqrt(pow(scale('x', datum['Horsepower']) - scale('x', active['Horsepower']), 2) + pow(scale('y', datum['Miles_per_Gallon']) - scale('y', active['Miles_per_Gallon']), 2)) <= lensRadius"
+        }
+      ]
+    }
+  ],
+  "signals": [
+     {"name": "lensRadius", "value": 30},
+    {"name": "lensSize", "value": 900},
+    {
+      "name": "active",
+      "value": {},
+      "on": [{"events": "mousemove", "update": "datum"}]
+    },
+    {
+      "name": "cursor",
+      "value": {"expr": "{x:-0,y:-0}"},
+      "on": [{"events": "window:mousemove", "update": "{x:x(),y:y()}"}]
+    }
+  ],
+  "scales": [
+    {
+      "name": "x",
+      "type": "linear",
+      "round": true,
+      "nice": true,
+      "zero": true,
+      "domain": {"data": "source", "field": "Horsepower"},
+      "range": "width"
+    },
+    {
+      "name": "y",
+      "type": "linear",
+      "round": true,
+      "nice": true,
+      "zero": true,
+      "domain": {"data": "source", "field": "Miles_per_Gallon"},
+      "range": "height"
+    },
+    {
+      "name": "color",
+      "type": "ordinal",
+      "domain": {"data": "source", "field": "Origin"},
+      "range": "category"
+    }
+  ],
+  "axes": [
+    {
+      "scale": "x",
+      "grid": true,
+      "domain": false,
+      "orient": "bottom",
+      "tickCount": 5,
+      "title": "Horsepower"
+    },
+    {
+      "scale": "y",
+      "grid": true,
+      "domain": false,
+      "orient": "left",
+      "titlePadding": 5,
+      "title": "Miles_per_Gallon"
+    }
+  ],
+  "legends": [{"stroke": "color", "title": "Origin", "orient": "right"}],
+  "marks": [
+    {
+      "name": "marks",
+      "type": "symbol",
+      "from": {"data": "source"},
+      "encode": {
+        "update": {
+          "x": {"scale": "x", "field": "Horsepower"},
+          "y": {"scale": "y", "field": "Miles_per_Gallon"},
+          "shape": {"value": "circle"},
+          "strokeWidth": {"value": 1},
+          "opacity": {"value": 0.5},
+          "stroke": {"scale": "color", "field": "Origin"}
+        }
+      }
+    },
+    {
+      "name": "labels",
+      "type": "text",
+      "from": {"data": "selected"},
+      "encode": {
+        "enter": {
+          "fill": {"value": "#333"},
+          "fontSize": {"value": 14},
+          "fontWeight": {"value": "bold"},
+          "text": {"field": "Name"},
+          "align": {"value": "center"},
+          "baseline": {"value": "bottom"}
+        },
+        "update": {
+          "x": {"scale": "x", "field": "Horsepower"},
+          "y": {"scale": "y", "field": "Miles_per_Gallon", "offset": -2}
+        }
+      }
+    },
+    {
+      "name": "lens",
+      "type": "symbol",
+      "encode": {
+        "enter": {
+          "fill": {"value": "none"},
+          "stroke": {"value": "green"}
+        },
+        "update": {
+          "x": {"signal": "cursor['x']"},
+          "y": {"signal": "cursor['y']"},
+          "size": {"signal": "lensSize"},
+          "shape": {"value": "circle"},
+          "strokeWidth": {"value": 1},
+          "opacity": {"value": 1}
+        }
+      }
+    }
+  ]
+}

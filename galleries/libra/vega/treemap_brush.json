@@ -13,8 +13,8 @@
       }
     ],
     "signals": [
-      {"name": "start", "value": null},
-      {"name": "end", "value": null}
+      {"name": "start", "value": [0,0]},
+      {"name": "end", "value": [0,0]}
     ],
     "marks": [
       {
@@ -55,7 +55,7 @@
             "size": {"value": 100}
           },
           "update": {
-            "fill": {"scale": "brush", "field": "selected", "mult": "scales"}
+            "fill": {"scale": "brush", "field": "selected"}
           }
         }
       }

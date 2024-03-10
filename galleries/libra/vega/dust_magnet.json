@@ -1,0 +1,109 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "width": 500,
+  "height": 300,
+  "padding": 5,
+  "autosize": {"type": "pad", "resize": true},
+
+  "signals": [
+    {
+      "name": "newMagnetX",
+      "value": 0
+    },
+    {
+      "name": "newMagnetY",
+      "value": 0
+    },
+    {
+      "name": "mouseXY",
+      "on": [
+        {"events": "mousemove", "update": "xy()"}
+      ]
+    },
+    {
+      "name": "clicked",
+      "value": false,
+      "on": [
+        {"events": "mousedown", "update": "true"},
+        {"events": "mouseup", "update": "false"}
+      ]
+    },
+    {
+      "name": "magnets",
+      "update": "clicked ? {x: mouseXY[0], y: mouseXY[1], category: 'New', strength: 100} : magnets"
+    }
+  ],
+
+  "data": [
+    {
+      "name": "source",
+      "url": "data/cars.json"
+    },
+    {
+      "name": "magnets",
+      "values": []
+    }
+  ],
+
+  "scales": [
+    {
+      "name": "xscale",
+      "type": "linear",
+      "domain": [0, 500],
+      "range": "width"
+    },
+    {
+      "name": "yscale",
+      "type": "linear",
+      "domain": [0, 300],
+      "range": "height"
+    }
+  ],
+
+  "marks": [
+    {
+      "type": "symbol",
+      "from": {"data": "source"},
+      "encode": {
+        "enter": {
+          "x": {"value": 250},
+          "y": {"value": 150},
+          "size": {"value": 100},
+          "fill": {"value": "grey"}
+        },
+        "update": {
+          "x": {"signal": "scale('xscale', datum[newMagnetX])"},
+          "y": {"signal": "scale('yscale', datum[newMagnetY])"},
+          "size": {"signal": "pow(datum[magnets.category], 2) / 200"}
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "from": {"data": "magnets"},
+      "encode": {
+        "enter": {
+          "x": {"signal": "newMagnetX - 10"},
+          "y": {"signal": "newMagnetY - 10"},
+          "width": {"value": 20},
+          "height": {"value": 20},
+          "fill": {"value": "orange"}
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {"data": "magnets"},
+      "encode": {
+        "enter": {
+          "x": {"signal": "newMagnetX + 10"},
+          "y": {"signal": "newMagnetY + 10"},
+          "text": {"field": "category"},
+          "align": {"value": "center"},
+          "baseline": {"value": "middle"},
+          "fill": {"value": "black"}
+        }
+      }
+    }
+  ]
+}

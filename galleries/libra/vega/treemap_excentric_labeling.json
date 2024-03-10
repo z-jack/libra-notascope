@@ -1,0 +1,87 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "Interactive treemap with excentric labeling.",
+  "width": 800,
+  "height": 500,
+  "padding": 5,
+  "data": [
+    {
+      "name": "tree",
+      "url": "data/flare.json",
+      "transform": [
+        {
+          "type": "stratify",
+          "key": "id",
+          "parentKey": "parent"
+        },
+        {
+          "type": "treemap",
+          "field": "size",
+          "sort": {"field": "value", "order": "descending"},
+          "round": true,
+          "size": [{"signal": "width"}, {"signal": "height"}],
+          "paddingInner": 1,
+          "as": ["x0", "y0", "x1", "y1"]
+        }
+      ]
+    }
+  ],
+  "signals": [
+    {
+      "name": "cursorX",
+      "value": 0,
+      "on": [{"events": "mousemove", "update": "x()"}]
+    },
+    {
+      "name": "cursorY",
+      "value": 0,
+      "on": [{"events": "mousemove", "update": "y()"}]
+    },
+    {
+      "name": "hoverNode",
+      "value": null,
+      "on": [
+        {"events": "mousemove", "update": "datum"}
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "color",
+      "type": "ordinal",
+      "range": {"scheme": "category20"}
+    }
+  ],
+  "marks": [
+    {
+      "type": "rect",
+      "from": {"data": "tree"},
+      "encode": {
+        "enter": {
+          "fill": {"scale": "color", "field": "depth"}
+        },
+        "update": {
+          "x": {"field": "x0"},
+          "y": {"field": "y0"},
+          "x2": {"field": "x1"},
+          "y2": {"field": "y1"}
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {"data": "tree"},
+      "encode": {
+        "update": {
+          "x": {"signal": "cursorX"},
+          "y": {"signal": "cursorY"},
+          "text": {"signal": "hoverNode ? hoverNode.name : ''"},
+          "fill": {"value": "black"},
+          "align": {"value": "center"},
+          "baseline": {"value": "middle"},
+          "fontSize": {"value": 10}
+        }
+      }
+    }
+  ]
+}
