@@ -1,4 +1,4 @@
-name: env
+name: notascope
 channels:
   - conda-forge
   - defaults
