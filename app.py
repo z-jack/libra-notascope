@@ -86,7 +86,7 @@ def sanitize_state(hashpath_values):
     state = defaultdict(str, hashpath_values)
 
     if state["gallery"] not in galleries():
-        state["gallery"] = "movies"
+        state["gallery"] = "libra-int-only"
 
     if state["distance"] not in distance_types:
         state["distance"] = distance_types[0]

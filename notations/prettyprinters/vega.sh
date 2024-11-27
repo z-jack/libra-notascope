@@ -1,3 +1,3 @@
 #!/bin/zsh
 
-cat $1 | jq 'del(..|.data?.values?)' | jq 'del(.datasets)' |  jq 'del(.description)'| jq -S > $2
+npx prettier --print-width=60 $1 > $2
