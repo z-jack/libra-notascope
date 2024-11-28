@@ -14,7 +14,7 @@ def distances_df(gallery=None, notation=None):
             return distances_df().query(
                 f"gallery == '{gallery}' and notation=='{notation}'"
             )
-    return pd.read_parquet("results/distances.pqt")
+    return pd.read_parquet("../results/distances.pqt")
 
 
 @cache

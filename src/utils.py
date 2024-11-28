@@ -21,7 +21,7 @@ def debug_mode():
 
 @cache
 def load_registry():
-    with open("results/registry.json", "r") as f:
+    with open("../results/registry.json", "r") as f:
         return json.load(f)
 
 
@@ -83,7 +83,7 @@ def md_lang(gallery, notation):
 @cache
 def img_path(gallery, notation, spec):
     imgext = ext(gallery, notation, "img")
-    return f"/assets/results/{gallery}/{notation}/img/{spec}.{imgext}?{time()}"
+    return f"../assets/results/{gallery}/{notation}/img/{spec}.{imgext}?{time()}"
 
 
 def spec_from_path(path):

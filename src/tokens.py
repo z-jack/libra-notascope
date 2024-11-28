@@ -4,4 +4,4 @@ import pandas as pd
 
 @cache
 def load_tokens():
-    return pd.read_parquet("results/tokens.pqt")
+    return pd.read_parquet("../results/tokens.pqt")

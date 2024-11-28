@@ -13,3 +13,5 @@ notebooks/figs
 .yarn
 __pycache__
 .DS_Store
+figs/*
+!figs/.gitkeep
